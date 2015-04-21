@@ -37,52 +37,30 @@ form .btn-primary {
 </head>
 <body>
   <div class="container">
-    <h1>DependencyWheel: An Interactive Visualization Of Package Dependencies</h1>
+    <h1>App Development: An Interactive Visualization Of Platforms, Languages & Frameworks</h1>
 
     <div id="chart_placeholder"></div>
 
-    <p>DependencyWheel tries to answer these needs. Also, it tries to make dependencies look beautiful, but that's another story.</p>
     
     <h2>Usage</h2>
-    <p>To create a DependencyWheel, include the <code>d3.dependencyWheel.js</code> file together with <code>d3.js</code>, just like in this page. Create a new instance of the dependency wheel chart constructor, then make a d3 selection using a CSS selector (of the div where the wheel should be inserted), attach dependency data, and call the chart on the selection.</p>
-<pre>
-var chart = d3.chart.dependencyWheel();
-d3.select('#chart_placeholder')
-  .datum(data)
-  .call(chart);
-</pre>
-    <p>The data must be a matrix of dependencies. The first item must be the main package. For instance, if the main package depends on packages A and B, and package A also depends on package B, you should build the data as follows:</p>
+    <p>DependencyWheel is based on <code>d3.js</code> and <code>d3.dependencyWheel.js</code></p>
+
+    <p>The data must be a matrix of dependencies. Link Platforms, Languages and Frameworks that work together.</p>
 <pre>
 var data = {
-  packageNames: ['Main', 'A', 'B'],
-  matrix: [[0, 1, 1], // Main depends on A and B
-           [0, 0, 1], // A depends on B
-           [0, 0, 0]] // B doesn't depend on A or Main
+  nodes: ['C#', 'Windows', 'Xamarin', WinJS],
+  matrix: [[0, 1, 1, 0], // C# works on Windows with Xamarin
+           [0, 1, 1, 1], // On Windows you can write apps using C#, Xamarin & WinJS
+		   [1, 1, 0, 0], // Xamarin apps can be written in C# and work on Windows
+           [0, 1, 0, 0]] // WinJS is a Framework for Windows
 };
-</pre>
-    <p>For more information about the matrix format, check the <a href="https://github.com/mbostock/d3/wiki/Chord-Layout">d3 Chord Layout</a> documentation.</p>
-    <p>DependencyWheel comes with a utility to transform data from <code>composer.json</code> and <code>composer.lock</code> files into a matrix and a list of package names. You first need to include the <code>composerBuilder.js</code> script provided in this repository, and then call:</p>
-<pre>
-var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
-d3.select('#chart_placeholder')
-  .datum(data)
-  .call(chart);
-</pre>
-    <p>DependencyWheel follows the <a href="http://bost.ocks.org/mike/chart/">d3.js reusable charts</a> pattern to let you customize the chart at will:</p>
-<pre>
-var chart = d3.chart.dependencyWheel()
-  .width(700)    // also used for height, since the wheel is in a a square
-  .margin(150)   // used to display package names
-  .padding(.02); // separating groups in the wheel
+
 </pre>
 
-    <h2>Sharing your DependencyWheels</h2>
-    <p>The best way to share your DependencyWheels is to use <a href="http://pages.github.com/">GitHub Pages</a>, just like this very page. So just fork the <a href="https://github.com/fzaninotto/DependencyWheel">fzaninotto/DependencyWheel</a> repository, add your own JSON data under the <code>data/</code> directory, commit the code, and push to the <code>gh-pages</code> branch. GitHub will publish the result for you.</p>
     <h2>Licence</h2>
-    <p>All this work is open-source, published by <a href="https://twitter.com/francoisz">François Zaninotto</a> under the MIT license. Sponsored by <a href="http://marmelab.com">marmelab</a>.</p>
-
+    <p>All this work is based on the <a href="http://www.redotheweb.com/DependencyWheel/">DependencyWheel</a>, published by <a href="https://twitter.com/francoisz">François Zaninotto</a> under the MIT license.</p>
+	<p>Adaped by <a href="https://twitter.com/th_p">Thomas Pentenrieder</a></p>
     
-  <a href="https://github.com/fzaninotto/DependencyWheel"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub"></a>
   <script src="js/d3.min.js"></script>
   <script src="js/d3.dependencyWheel.js"></script>
   <script>
