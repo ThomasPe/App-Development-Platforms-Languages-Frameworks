@@ -1,5 +1,9 @@
 App Development: An Interactive Visualization Of Platforms, Languages & Frameworks
 ================
+
+<a href="http://thomaspe.github.io/App-Development-Platforms-Languages-Frameworks/">View the interactive chart of how platforms, languages and frameworks work together in the app development world.</a>
+
+
 The data must be a matrix of dependencies. Link Platforms, Languages and Frameworks that work together.
 
     var data = {
