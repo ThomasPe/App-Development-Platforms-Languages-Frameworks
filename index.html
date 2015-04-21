@@ -39,31 +39,8 @@ form .btn-primary {
   <div class="container">
     <h1>DependencyWheel: An Interactive Visualization Of Package Dependencies</h1>
 
-    <p class="lead">Modern development use package managers (composer, npm, bundler, etc.). Applications depend on a large number of packages, which depend themselves on other packages. The Dependency Wheel visualization attempts to reveal the entire dependency tree of any PHP library using Composer for dependency management. Each chord in the disc represents a dependency. Try hovering on packages to mask other dependencies. All rendering is done client-side, in JavaScript. Built with <a href="https://github.com/mbostock/d3">d3.js</a></p>
-
     <div id="chart_placeholder"></div>
 
-    <p>Do you want to try it out with another project? Paste the <code>composer.json</code> and <code>composer.lock</code> of any PHP project below to see its Dependency Wheel:</p>
-    <form role="form" id="composerRedraw" class="clearfix">
-      <div class="form-group col-lg-4">
-        <label for="composerJson">composer.json</label>
-        <textarea required type="text" class="form-control" id="composerJson"></textarea>
-      </div>
-      <div class="form-group col-lg-4">
-        <label for="composerLock">composer.lock</label>
-        <textarea required type="text" class="form-control" id="composerLock"></textarea>
-      </div>
-      <div class="form-group col-lg-4">
-        <button type="submit" class="btn btn-lg btn-primary">Refresh</button>
-      </div>
-    </form>
-
-    <h2>Purpose</h2>
-    <ul class="list-unstyled">
-      <li>Did you ever dive into an existing project and wonder how much code is hidden behind a given dependency?</li>
-      <li>Did you ever wonder if a package present in the <code>vendor/</code> directory is actually useful?</li>
-      <li>Did you ever look for a visualization that would help you understand the mess that's in a <code>composer.json</code>?</li>
-    </ul>
     <p>DependencyWheel tries to answer these needs. Also, it tries to make dependencies look beautiful, but that's another story.</p>
     
     <h2>Usage</h2>
@@ -119,62 +96,35 @@ var chart = d3.chart.dependencyWheel()
   <script src="js/d3.dependencyWheel.js"></script>
   <script src="js/composerBuilder.js"></script>
   <script>
-  var gitHubApiUrl = 'https://api.github.com/repos/';
-  var getData = function(target, callback) {
-    var responses = {
-      composerjson: null,
-      composerlock: null
-    };
-    var checkFinished = function() {
-      if (responses.composerjson && responses.composerlock) {
-        callback(responses.composerjson, responses.composerlock);
-      }
-    }
-    d3.xhr(gitHubApiUrl + target + '/contents/composer.json', 'application/vnd.github.VERSION.raw', function(err, composerjson) {
-      responses.composerjson = JSON.parse(composerjson.responseText);
-      checkFinished();
-    });
-    d3.xhr(gitHubApiUrl + target + '/contents/composer.lock', 'application/vnd.github.VERSION.raw', function(err, composerlock) {
-      responses.composerlock = JSON.parse(composerlock.responseText);
-      checkFinished();
-    });
-  };
 
   var chart = d3.chart.dependencyWheel();
-
-  d3.json('data/composer.json', function(composerjson) {
-    d3.json('data/composer.lock', function(composerlock) {
-      var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
-      d3.select('#chart_placeholder')
+  var data = {
+	  packageNames: [
+	  'C#', 'Java', 'Swift / Objective C', 'JavaScript', 				// Languages
+	  'Android', 'iOS', 'Windows', 										// Platforms 
+	  'Xamarin', 'Cordova', 'Unity', 'Unreal', 'Cocos2d-JS', 'WinJS'	// Frameworks 
+	  ],
+	  //		1  2  3  4  5  6  7  8  9  10 11 12 13
+	  matrix: [[0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0], // 1  C#
+			   [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], // 2  Java
+			   [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], // 3  Swift
+			   [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1], // 4  JavaScript
+			   [0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0], // 5  Android
+			   [0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0], // 6  iOS
+			   [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1], // 7  Windows
+			   [1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0], // 8  Xamarin
+			   [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0], // 9  Cordova
+			   [1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0], // 10 Unity
+			   [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0], // 11 Unreal
+			   [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0], // 12 Cocos2d-JS
+			   [0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0], // WinJS
+			   ] 
+	};
+	d3.select('#chart_placeholder')
         .datum(data)
         .call(chart);
-    });
-  });
-
-  document.getElementById('composerRedraw').addEventListener('submit', function(e) {
-    e.preventDefault();
-    var composerjson = JSON.parse(document.getElementById('composerJson').value);
-    var composerlock = JSON.parse(document.getElementById('composerLock').value);
-    var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
-    d3.select('#chart_placeholder svg').remove();
-    d3.select('#chart_placeholder')
-      .datum(data)
-      .call(chart);
-  }, false);
 
 </script>
-<script type="text/javascript">
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-26354577-2']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
 </body>
 </html>
