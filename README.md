@@ -1,8 +1,15 @@
-Dependency Wheel
+App Development: An Interactive Visualization Of Platforms, Languages & Frameworks
 ================
+The data must be a matrix of dependencies. Link Platforms, Languages and Frameworks that work together.
 
-This experiment visualizes package dependencies using an interactive disc. Each disc section represents a dependency, and links between arcs materialize these dependencies. All rendering is done client-side, in JavaScript. Built with <a href="https://github.com/mbostock/d3">d3.js</a>, published with the MIT open-source license.
+    var data = {
+      nodes: 	['C#', 'Windows', 'Xamarin', WinJS],
+      matrix: 
+      [[0, 1, 1, 0], // C# works on Windows with Xamarin
+      [0, 1, 1, 1], // On Windows you can write apps using C#, Xamarin & WinJS
+      [1, 1, 0, 0], // Xamarin apps can be written in C# and work on Windows
+      [0, 1, 0, 0]] // WinJS is a Framework for Windows
+    };
 
-Interact with DependencyWheels, see examples, and build your own at [http://fzaninotto.github.com/DependencyWheel](http://fzaninotto.github.com/DependencyWheel).
 
-![The Dependency Wheel of the sylius/sylius project](http://redotheweb.com/DependencyWheel/img/dependency_chord.gif)
+All this work is based on the <a href="http://www.redotheweb.com/DependencyWheel/">DependencyWheel</a>, published by <a href="https://twitter.com/francoisz">François Zaninotto</a> under the MIT license.
